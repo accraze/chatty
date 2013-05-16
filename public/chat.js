@@ -1,6 +1,6 @@
 window.onload = function() {
  
-    var messages = [];
+    var messages = []; // no messages at first
     var socket = io.connect('http://localhost:3700');
     var field = document.getElementById("field");
     var sendButton = document.getElementById("send");
@@ -16,9 +16,8 @@ window.onload = function() {
                 html += '<b>' + (messages[i].username ? messages[i].username : 'Server') + ': </b>';
                 html += messages[i].message + '<br />';
             }
+            //scrolling... not supported in IE7
             content.innerHTML = html;
-            
-            //does not support IE7
             content.scrollTop = content.scrollHeight;
         } else {
             console.log("There is a problem:", data);
@@ -26,7 +25,7 @@ window.onload = function() {
     });
  
     // sends the message to socket.io
-    sendButton.onclick = sendMessage = function() {
+    sendButton.onclick = sendMessage = function() { 
         if(name.value == "") {
             alert("Please type your name!");
         } else {
@@ -35,11 +34,11 @@ window.onload = function() {
             field.value = "";
         }
     };
-
+    // listens if the user presses the 'enter' button to submit a message
     $(document).ready(function() {
     $("#field").keyup(function(e) {
         if(e.keyCode == 13) {
-            sendMessage();
+            sendMessage(); // a.k.a sendButton.onclick
         }
     });
 });

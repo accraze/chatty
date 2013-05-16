@@ -1,11 +1,11 @@
 {
     "name": "Chatty",
     "version": "0.0.0",
-    "description": "Real time chat client",
+    "description": "chat client",
     "dependencies": {
         "socket.io": "latest",
         "express": "latest",
         "jade": "latest"
     },
-    "author": "developer"
+    "author": "accraze"
 }

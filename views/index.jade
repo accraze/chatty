@@ -1,26 +1,24 @@
 extends layout
  
 block content
-  .top
-    form.form-horizontal(method="post", id="loginForm")
-      label Username
-      input.span3(id="username", type="text", name="User", placeholder="Enter your username")
-      label Password
-      input.span3(id="password", type="password", name="Password")
-      input.btn(type="submit", value="Log In")
+  .navbar.navbar-inverse.fixed-top
+    .navbar-inner
+      .container
+        a.brand(href='#') Chatty
+        .nav-collapse.collapse
+          ul.nav
+            li.first.active
+              a(href='#') Home
+            li
+              a(href='#') About
+            li.last
+              a(href='#') Contact
+        form.navbar-form.pull-right(method="post", id="loginForm")
+          input.span2(id="username", type="text", name="User", placeholder="Username" )
+          input.span2(id="password", type="password", name="Password")
+          input.btn(type="submit", value="Join Chat")
   .container
     .content
-      table.table.table-striped
-        thead
-          tr
-            th Table
-            th Heading
-        tbody
-          tr
-            td Blah
-            td Test
-          tr
-            td Hello
-            td World
- 
-  .footer
+        include page
+    .footer
+      p © GYITTT 2013
