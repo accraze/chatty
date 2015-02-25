@@ -6,6 +6,7 @@
   "dependencies": {
     "body-parser" : "latest",
     "csurf" : "latest",
+    "connect-flash" : "latest",
     "express" : "latest",
     "cookie-parser": "latest",
     "express-session": "latest",

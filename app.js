@@ -10,6 +10,7 @@ var RedisStore = require('connect-redis')(session);
 var bodyParser = require('body-parser');
 var csrf = require('csurf');
 var util = require('./middleware/utilities');
+var flash = require('connect-flash');
 
 app.set('view engine', 'ejs');
 app.set('view options', {defaultLayout: 'layout'});
@@ -30,6 +31,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(csrf());
 app.use(util.csrf);
+app.use(util.authenticated);
+app.use(flash());
 
 app.use(function(req, res, next){
      if(req.session.pageCount)
@@ -43,7 +46,8 @@ app.use(function(req, res, next){
 app.get('/', routes.index);
 app.get('/login', routes.login);
 app.post('/login', routes.loginProcess);
-app.get('/chat', routes.chat);
+app.get('/logout', routes.logOut);
+app.get('/chat', [util.requireAuthentication], routes.chat);
 app.get('/error', function(req, res, next){
      next(new Error('A contrived error'));
 });
