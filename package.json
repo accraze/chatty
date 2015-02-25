@@ -4,6 +4,8 @@
   "description": "scalable chat client",
   "main": "app.js",
   "dependencies": {
+    "body-parser" : "latest",
+    "csurf" : "latest",
     "express" : "latest",
     "cookie-parser": "latest",
     "express-session": "latest",

@@ -7,10 +7,14 @@ var partials = require('express-partials');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
+var bodyParser = require('body-parser');
+var csrf = require('csurf');
+var util = require('./middleware/utilities');
 
 app.set('view engine', 'ejs');
 app.set('view options', {defaultLayout: 'layout'});
 
+//middleware stack
 app.use(partials());
 app.use(log.logger);
 app.use(express.static(__dirname + '/static'));
@@ -22,6 +26,10 @@ app.use(session({secret: 'secret',
        {url: 'redis://localhost'})
      })
 );
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(csrf());
+app.use(util.csrf);
 
 app.use(function(req, res, next){
      if(req.session.pageCount)
@@ -31,7 +39,7 @@ app.use(function(req, res, next){
      next();
 });
 
-
+//routes
 app.get('/', routes.index);
 app.get('/login', routes.login);
 app.post('/login', routes.loginProcess);

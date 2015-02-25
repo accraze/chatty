@@ -10,7 +10,8 @@ exports.login = function login (req, res){
  res.render('login', {title: 'Login'});
 };
 function loginProcess(req, res){
- res.redirect('/');
+ console.log(req.body);
+ res.send(req.body.username + ' ' + req.body.password);
 };
 exports.chat = function chat (req, res){
   res.render('chat', {title: 'Chat'});
