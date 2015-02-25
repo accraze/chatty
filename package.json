@@ -5,6 +5,8 @@
   "main": "app.js",
   "dependencies": {
     "express" : "latest",
+    "cookie-parser": "latest",
+    "express-session": "latest",
     "connect-redis": "^1.4.7",
     "connect-flash": "^0.1.1",
     "ejs": "^0.8.5",
