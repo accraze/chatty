@@ -1,5 +1,6 @@
 module.exports.loginProcess = loginProcess;
 var util = require('../middleware/utilities');
+var config = require('../config');
 
 exports.index = function index (req, res){
  res.render('Index', {layout: 'layout', title: 'Index'});
@@ -15,7 +16,7 @@ function loginProcess(req, res){
        res.redirect('/chat');
      }else {
        req.flash('error', 'Wrong Username or Password');
-       res.redirect('/login');
+       res.redirect(config.routes.login);
     }
 };
 exports.logOut = function logOut(req, res){
