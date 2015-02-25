@@ -1,11 +1,33 @@
 {
-    "name": "Chatty",
-    "version": "0.0.0",
-    "description": "chat client",
-    "dependencies": {
-        "socket.io": "latest",
-        "express": "latest",
-        "jade": "latest"
-    },
-    "author": "accraze"
+  "name": "chatty",
+  "version": "0.0.0",
+  "description": "scalable chat client",
+  "main": "app.js",
+  "dependencies": {
+    "express" : "latest",
+    "connect-redis": "^1.4.7",
+    "connect-flash": "^0.1.1",
+    "ejs": "^0.8.5",
+    "express-partials": "^0.2.0",
+    "redis": "^0.10.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test",
+    "stop": "echo not implemented",
+    "start": "node ./app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/accraze/chatty.git"
+  },
+  "keywords": [
+    "chat"
+  ],
+  "author": "accraze",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/accraze/chatty/issues"
+  },
+  "homepage": "https://github.com/accraze/chatty"
 }
