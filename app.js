@@ -13,6 +13,7 @@ var util = require('./middleware/utilities');
 var flash = require('connect-flash');
 var config = require('./config');
 var io = require('./socket.io');
+var passport = require('./passport');
 
 app.set('view engine', 'ejs');
 app.set('view options', {defaultLayout: 'layout'});
@@ -29,6 +30,8 @@ app.use(session({secret: config.secret,
        {url: config.redisUrl})
      })
 );
+app.use(passport.passport.initialize()); 
+app.use(passport.passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(csrf());
@@ -44,6 +47,7 @@ app.use(function(req, res, next){
        req.session.pageCount = 1;
      next();
 });
+
 
 
 //routes
