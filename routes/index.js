@@ -1,4 +1,4 @@
-module.exports.loginProcess = loginProcess;
+//module.exports.loginProcess = loginProcess;
 var util = require('../middleware/utilities');
 var config = require('../config');
 
@@ -10,15 +10,15 @@ exports.login = function login (req, res){
  res.render('login', {title: 'Login', message: req.flash('error')});
 };
 
-function loginProcess(req, res){
-  var isAuth = util.auth(req.body.username, req.body.password, req.session);
-     if (isAuth) {
-       res.redirect(config.routes.chat);
-     }else {
-       req.flash('error', 'Wrong Username or Password');
-       res.redirect(config.routes.login);
-    }
-};
+// function loginProcess(req, res){
+//   var isAuth = util.auth(req.body.username, req.body.password, req.session);
+//      if (isAuth) {
+//        res.redirect(config.routes.chat);
+//      }else {
+//        req.flash('error', 'Wrong Username or Password');
+//        res.redirect(config.routes.login);
+//     }
+// };
 exports.logOut = function logOut(req, res){
      util.logOut(req);
      res.redirect('/');

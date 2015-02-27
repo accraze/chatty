@@ -53,7 +53,6 @@ app.use(function(req, res, next){
 //routes
 app.get('/', routes.index);
 app.get(config.routes.login, routes.login);
-app.post(config.routes.login, routes.loginProcess);
 app.get(config.routes.logout, routes.logOut);
 app.get(config.routes.chat, [util.requireAuthentication], routes.chat);
 app.get('/error', function(req, res, next){
