@@ -6,6 +6,7 @@ var config = {
      routes: {
        login: '/account/login',
        logout: '/account/logout',
+       register: '/account/register',
        chat: '/chat',
        facebookAuth: '/auth/facebook',
        facebookAuthCallback: '/auth/facebook/callback',
