@@ -4,6 +4,7 @@ google = require('passport-google-oauth').OAuth2Strategy,
 local = require('passport-local').Strategy,
 passwordUtils = require('./password'),
 user = require('./user'),
+log = require('../middleware/log')
 config = require('../config');
 
 passport.use(new facebook({
@@ -40,11 +41,13 @@ passport.use(new local(function(username, password, done){
              done(null, profile);
           }
            else {
+             log.debug({message: 'Wrong Username or Password', username: username});
              done(null, false, {message: 'Wrong Username or Password'});
            } 
       });
     }
     else {
+         log.debug({message: 'Wrong Username or Password', username: username});
          done(null, false, {message: 'Wrong Username or Password'});
        }
      });

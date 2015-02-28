@@ -23,7 +23,9 @@
     "passport-local" : "latest",
     "passport-facebook" : "latest",
     "passport-google-oauth" : "latest",
-    "scmp" : "latest"
+    "scmp" : "latest",
+    "amqp" : "latest",
+    "q": "latest"
   },
   "devDependencies": {},
   "scripts": {
