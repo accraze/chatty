@@ -25,7 +25,8 @@
     "passport-google-oauth" : "latest",
     "scmp" : "latest",
     "amqp" : "latest",
-    "q": "latest"
+    "q": "latest",
+    "flow-maintained": "0.2.3"
   },
   "devDependencies": {},
   "scripts": {
