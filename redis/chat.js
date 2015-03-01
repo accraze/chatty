@@ -34,7 +34,6 @@ exports.getChat = function getChat(room, cb){
      cb(chats);
    });
  };
-};
 
 exports.addUserToRoom = function addUserToRoom(user, room) {
   client.multi()

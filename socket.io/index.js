@@ -1,46 +1,112 @@
-var io = require('socket.io');
-var redis = require('socket.io-redis');
-var config = require('../config');
-var cookie = require('cookie');
-var cookieParser = require('cookie-parser');
-var expressSession = require('express-session');
-var ConnectRedis = require('connect-redis')(expressSession);
-var redisSession = new ConnectRedis({host: config.redisHost, port: config.redisPort});
+var io = require('socket.io'),
+cookie = require('cookie'),
+cookieParser = require('cookie-parser'),
+expressSession = require('express-session'),
+ConnectRedis = require('connect-redis')(expressSession),
+redisAdapter = require('socket.io-redis'),
+redis = require('redis'),
+config = require('../config'),
+redisSession = new ConnectRedis({host: config.redisHost, port: config.redisPort}),
+redisChat = require('../redis/chat'),
+models = require('../redis/models'),
+log = require('../middleware/log');
 
 var socketAuth = function socketAuth(socket, next) {
-var handshakeData = socket.request;
-var parsedCookie = cookie.parse(handshakeData.headers.cookie);
-var sid = cookieParser.signedCookie(parsedCookie['connect.sid'], config.secret);
-  
-  if(parsedCookie['connect.sid'] === sid)
-    return next (new Error('Not Authenticated'));
+  var handshakeData = socket.request;
+  var parsedCookie = cookie.parse(handshakeData.headers.cookie);
+  var sid = cookieParser.signedCookie(parsedCookie['connect.sid'], config.secret);
+    
+    if(parsedCookie['connect.sid'] === sid)
+      return next (new Error('Not Authenticated'));
 
-  redisSession.get(sid, function(err, session){
-       if (session.isAuthenticated)
-       {
-         socket.user = session.user;
-         socket.sid = sid;
-         return next();
-       }
-      else
-         return next(new Error('Not Authenticated'));
-  });
-};
+    redisSession.get(sid, function(err, session){
+         if (session.isAuthenticated)
+         {
+           socket.request.user = session.passport.user;
+           socket.request.sid = sid;
+           redisChat.addUser(session.passport.user.id, 
+                             session.passport.user.displayName, 
+                             session.passport.user.provider);
+           return next();
+         }
+        else
+           return next(new Error('Not Authenticated'));
+    });
+}
 
 var socketConnection = function socketConnection(socket) {
-  socket.on('GetMe', function(){});
+  socket.on('GetMe', function(){
+    socket.emit('GetMe', models.User(socket.request.user.id,
+                                      socket.request.user.displayName, 
+                                      socket.request.user.provider));
+  });
+
   socket.on('GetUser', function(room){});
-  socket.on('GetChat', function(data){});
-  socket.on('AddChat', function(chat){});
-  socket.on('GetRoom', function(){});
-  socket.on('AddRoom', function(r){});
-  socket.on('disconnect', function(){});
+
+  socket.on('GetChat', function(data){
+    redis.Chat.getChat(data.room, function(chats){
+      var retArray = [];
+      var len = chats.length;
+      chats.forEach(function(c){
+        try{
+           retArray.push(JSON.parse(c));
+         }catch(e){
+           log.error(e.message);
+         }
+         len--;
+         if (len === 0) socket.emit('GetChat', retArray);
+       });
+    });
+  });
+
+  socket.on('AddChat', function(chat){
+    var newChat = models.Chat(chat.message, chat.room, 
+                              models.User(socket.handshake.user.id, 
+                                          socket.handshake.user.displayName, 
+                                          socket.handshake.user.provider));
+    redis.chat.addChat(newChat);
+    socket.broadcast.to(chat.room).emit('AddChat', newChat);
+    socket.emit('AddChat', newChat);
+  });
+
+  socket.on('GetRoom', function(){
+    redisChat.getRooms(function(rooms){
+       var retArray = [];
+       var len = rooms.length;
+       rooms.forEach(function(r){
+         retArray.push(models.Room(r));
+         len--;
+         if(len === 0) socket.emit('GetRoom', retArray);
+       });
+    });
+  });
+
+  socket.on('AddRoom', function(r){
+    var room = r.name;
+    removeAllRooms(socket, function(){
+      if (room !== '')
+      {
+        socket.join(room);
+        redisChat.addRoom(room);
+        socket.broadcast.emit('AddRoom', models.Room(room));
+        socket.broadcast.to(room).emit('AddUser',
+                                       models.User(socket.handshake.user.id, 
+                                                   socket.handshake.user.displayName, 
+                                                   socket.user.provider));
+        redisChat.addUserToRoom(socket.handshake.user.id, room);
+      }
+    });
+  });
+
+  socket.on('disconnect', function(){
+    removeAllRooms(socket,function(){});
+  });
 };
 
 exports.startIo = function startIo(server) {
   io = io.listen(server);
 
-  io.adapter(redis({host: config.redisHost, port: config.redisPort}));
+  io.adapter(redisAdapter({host: config.redisHost, port: config.redisPort}));
 
   var chatty = io.of('/chatty');
   
@@ -48,4 +114,28 @@ exports.startIo = function startIo(server) {
   chatty.on('connection', socketConnection);
 
   return io;
+};
+
+var removeFromRoom = function removeFromRoom(socket, room){
+     socket.leave(room);
+     redisChat.removeUserFromRoom(socket.request.user.id, room);
+     socket.broadcast.to(room).emit('RemoveUser',
+                                      models.User(socket.request.user.id,
+                                      socket.request.user.displayName,
+                                      socket.request.user.provider));
+};
+
+var removeAllRooms = function removeAllRooms(socket, cb){
+     var current = socket.rooms;
+     var len = Object.keys(current).length;
+     var i = 0;
+     for(var r in current)
+     {
+       if (current[r] !== socket.id)
+       {
+         removeFromRoom(socket, current[r]);
+       }
+       i++;
+       if (i === len) cb();
+     }
 };
