@@ -1,40 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
- <title><%= title %></title>
- <link rel="stylesheet" href="/css/style.css">
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/cosmo/bootstrap.min.css"/>
- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
- <script type="text/javascript" src="/jquery/dist/jquery.js"></script>
- <script type="text/javascript" src="/underscore/underscore.js"></script>
- <script type="text/javascript" src="/backbone/backbone.js"></script>
- <script type="text/javascript" src="/react/react.js"></script>
- <script type="text/javascript" src="/postal.js/lib/postal.js"></script>
- <script type="text/javascript" src="/momentjs/moment.js"></script>
- <script type="text/javascript" src="/cryptojs/cryptojs.js"></script>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/superhero/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script type="text/javascript" src="/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="/underscore/underscore.js"></script>
+    <script type="text/javascript" src="/backbone/backbone.js"></script>
+    <script type="text/javascript" src="/react/react.js"></script>
+    <script type="text/javascript" src="/conduitjs/lib/conduit.js"></script>
+    <script type="text/javascript" src="/lodash/dist/lodash.js"></script>
+    <script type="text/javascript" src="/postal.js/lib/postal.js"></script>
+    <script type="text/javascript" src="/momentjs/moment.js"></script>
+    <script type="text/javascript" src="/js/md5.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-4"><h1>Chatty</h1></div>
+<div class="container">
+  <div class="row">
+      <div class="col-sm-4"><h1 class="pull-left">Chatty</h1></div>
       <div class="col-sm-4 col-sm-offset-4 top-margin">
-           <div class="pull-right">
-         <% if (isAuthenticated) { %>
-           <%- partial('partials/user-loggedin') %>
-         <% } else { %>
-           <%- partial('partials/user-loggedout') %>
-         <% } %>
-           </div>
-       </div>
-    </div>
-    <div class="row">
-      <%- body %>
+        <div class="pull-right">
+      <% if (isAuthenticated) { %>
+        <%- partial('partials/user-loggedin') %>
+      <% } else { %>
+        <%- partial('partials/user-loggedout') %>
+      <% } %>
+        </div>
     </div>
   </div>
-  <script type="text/javascript" src="/js/socket.io.js"></script>
-  <script>
-   var socket = io.connect("http://localhost:3000/chatty");
-   socket.on('message', function(d){console.log(d);});
-  </script>
+  <div class="row">
+  <%- body %>
+  </div>
+</div>
 </body>
 </html>

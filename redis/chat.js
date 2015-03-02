@@ -20,7 +20,7 @@ exports.getRooms = function getRooms(cb){
   });
 };
 
-exports.addChat - function addChat(chat) {
+exports.addChat = function addChat(chat) {
   client.multi()
      .zadd('rooms:' + chat.room + ':chats', Date.now(), 
             JSON.stringify(chat))
