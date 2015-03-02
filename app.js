@@ -22,6 +22,8 @@ app.set('view options', {defaultLayout: 'layout'});
 app.use(partials());
 app.use(log.logger);
 app.use(express.static(__dirname + '/static'));
+app.use(express.static(__dirname + '/bower_components'));
+
 app.use(cookieParser(config.secret));
 app.use(session({secret: config.secret,
      saveUninitialized: true,
