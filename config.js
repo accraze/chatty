@@ -1,8 +1,8 @@
 var config = {
-     port: 3000,
-     secret: 'secret',
-     redisPort: 6379,
-     redisHost: 'localhost',
+     port: process.env.PORT,
+     secret: process.env.SECRET,
+     redisPort: process.env.REDIS_PORT,
+     redisHost: process.env.REDIS_HOST,
      routes: {
        login: '/account/login',
        logout: '/account/logout',
@@ -13,14 +13,14 @@ var config = {
        googleAuth: '/auth/google',
        googleAuthCallback: '/auth/google/callback'
      },
-     host: 'http://localhost:3000',
+     host: process.env.HOST,
      facebook: {
-      appID: '388142218013049',
-      appSecret: 'ad02563566f7d096870248cec4f35c1b'
+      appID: process.env.FACEBOOK_APPID,
+      appSecret: process.env.FACEBOOK_APPSECRET
      },
      google: {
-      clientID: '456198845288-q682e11ltcd0v648qstkjm0mrq4dieeb.apps.googleusercontent.com',
-      clientSecret: 'islkBWXBkJvyhqFyNFMDAmNd'
+      clientID: process.env.GOOGLE_APPID,
+      clientSecret: process.env.GOOGLE_APPSECRET
      },
      crypto: {
        workFactor: 5000,
@@ -28,8 +28,8 @@ var config = {
        randomSize: 256
      },
      rabbitMQ: {
-       URL: 'amqp://guest:guest@localhost:5672',
-       exchange: 'chatty.log'
+       URL: process.env.RABBITMQ_URL,
+       exchange: process.env.RABBITMQ_EXCHANGE
     }
 };
 module.exports = config;
