@@ -46,13 +46,10 @@ var User = Backbone.Model.extend({
     switch(this.get('type')){
       case 'local':
         return this.gravatar(size);
-        break;
       case 'facebook':
         return this.facebook(size);
-        break;
       case 'google':
         return this.gravatar(size);
-        break;
     }
   },
   gravatar: function gravatar(size){

@@ -2,11 +2,17 @@
 <html>
 <head>
     <title><%= title %></title>
-    <link rel="stylesheet" href="undefined/css/cosmo.min.css">
-    <link rel="stylesheet" href="undefined/css/style.css">
+    <link rel="stylesheet" href="<!--@echo STATIC_URL -->/css/cosmo.min.css">
+    <link rel="stylesheet" href="<!--@echo STATIC_URL -->/css/style.css">
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 
-    <script type="text/javascript" src="undefined/js/Frameworks.js"></script>
+    <!-- @if NODE_ENV='production' -->
+    <script type="text/javascript" src="<!--@echo STATIC_URL -->/js/Frameworks.<!-- @echo GIT_HEAD -->.min.js"></script>
+    <!-- @endif -->
+
+    <!-- @if NODE_ENV!='production' -->
+    <script type="text/javascript" src="<!--@echo STATIC_URL -->/js/Frameworks.js"></script>
+    <!-- @endif -->
 </head>
 <body>
 <div class="container">
@@ -27,7 +33,7 @@
   </div>
 </div>
 <div class="container">
-<small>Commit: undefined</small>
+<small>Commit: <!-- @echo GIT_HEAD --></small>
 </div>
 </body>
 </html>
