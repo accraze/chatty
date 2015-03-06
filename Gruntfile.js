@@ -46,7 +46,11 @@ module.exports = function(grunt) {
                     'static/js/Frameworks.<%= git_head %>.min.js' : '<%= concat.frameworks.dest %>'
                 }
             }
-        }
+        },
+        watch: {
+         files: ['js_src/src/*.js'],
+         tasks: ['default']
+       }
      });
 
      grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -55,6 +59,8 @@ module.exports = function(grunt) {
      grunt.loadNpmTasks('grunt-preprocess');
      grunt.loadNpmTasks('grunt-contrib-clean');
      grunt.loadNpmTasks('grunt-contrib-nodeunit');
+     grunt.loadNpmTasks('grunt-contrib-watch');
+     
      // Default task(s).
      grunt.registerTask('default', ['nodeunit', 'preprocess', 'clean', 'jshint', 
                         'concat:app', 'concat:frameworks', 'uglify']);

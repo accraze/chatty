@@ -1,7 +1,7 @@
 var Chatty = window.Chatty || {};
 Chatty.Chat = function(el){
   var $root = $('#' + el),
-  socket = io.connect('undefined'),
+  socket = io.connect('http://localhost:3000/chatty'),
   me = null,
   connected = false;
   //to be initialized
