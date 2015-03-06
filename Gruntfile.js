@@ -1,6 +1,7 @@
 module.exports = function(grunt) {
      grunt.initConfig({
        pkg: grunt.file.readJSON('package.json'),
+       git_head: process.env.GIT_HEAD,
        nodeunit: {
          all: ['tests/*.js']
        },
@@ -18,10 +19,33 @@ module.exports = function(grunt) {
            src: ['static/js/*.js']
          }
        },
-       jshint: {
+       jshint:{
          dist:{
            src: ['js_src/src/*.js', '!js_src/src/md5.js']
          }
+        },
+        concat:{
+         app: {
+           src: ['js_src/src/md5.js', 'js_src/src/components.js', 'js_src/src/models.js', 
+           'js_src/src/chat.js'],
+           dest: 'static/js/ChatPage.js'
+         },
+         frameworks: {
+           src: ['bower_components/jquery/dist/jquery.js', 
+           'bower_components/underscore/underscore.js', 
+           'bower_components/backbone/backbone.js', 
+           'bower_components/react/react.js', 
+           'bower_components/postal.js/lib/postal.js', 'bower_components/momentjs/moment.js'],
+           dest: 'static/js/Frameworks.js'
+         }
+        },
+        uglify: {
+            dist: {
+                files: {
+                    'static/js/ChatPage.<%= git_head %>.min.js' : '<%= concat.app.dest %>',
+                    'static/js/Frameworks.<%= git_head %>.min.js' : '<%= concat.frameworks.dest %>'
+                }
+            }
         }
      });
 
@@ -32,5 +56,6 @@ module.exports = function(grunt) {
      grunt.loadNpmTasks('grunt-contrib-clean');
      grunt.loadNpmTasks('grunt-contrib-nodeunit');
      // Default task(s).
-     grunt.registerTask('default', ['nodeunit', 'preprocess', 'clean', 'jshint']);
+     grunt.registerTask('default', ['nodeunit', 'preprocess', 'clean', 'jshint', 
+                        'concat:app', 'concat:frameworks', 'uglify']);
      grunt.registerTask('prep', ['nodeunit', 'preprocess', 'clean']);};

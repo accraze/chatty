@@ -48,7 +48,7 @@ Chatty.Chat = function(el){
     function roomFormEvent(message){
       roomsCollection.add({name: message.roomName, id: message.roomName});
       router.navigate('room/' + message.roomName, {trigger: true});
-    };
+    }
 
     function RoomSelection(){
       roomsCollection.sync('create', {name: 'lobby', id: 'lobby'});
@@ -64,11 +64,11 @@ Chatty.Chat = function(el){
       userCollection.fetch({room: room});
       React.unmountComponentAtNode($root[0]);
       React.renderComponent(ChatView({users: userCollection, chats: chatCollection, room: room, me: me}), $root[0]);
-    };
+    }
 
     function DefaultRoute(){
       router.navigate('', {trigger: true});
-    };
+    }
 
     router.on('route:RoomSelection', RoomSelection);
     router.on('route:JoinRoom', JoinRoom);
